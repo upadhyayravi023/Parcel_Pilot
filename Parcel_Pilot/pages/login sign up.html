@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center; /* Center text in body */
+        }
+
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #333;
+            z-index: 2;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center contents of the container */
+        }
+
+        .logo {
+            height: 80px; /* Adjust height as needed */
+            width: auto;
+            filter: brightness(0) invert(1);
+            margin-right: 10px; /* Space between logo and name */
+        }
+
+        .website-name {
+            font-family: "Playwrite GB S", cursive;
+            font-weight: normal;
+            font-size: 60px;
+            color: white;
+        }
+
+        .tagline {
+            font-family: "Playwrite GB S", cursive;
+            font-weight: normal;
+            font-size: 30px;
+            color: white;
+            margin-top: 5px; /* Space between name and tagline */
+        }
+
+        .description {
+            color: white;
+            font-size: 22px;
+            max-width: 1000px;
+            margin-top: 40px;
+            padding: 0 20px;
+        }
+
+        .get-started-button {
+            margin-top: 20px; /* Space above button */
+            padding: 10px 20px; /* Button padding */
+            background-color: #4CAF50; /* Green color */
+            color: white; /* Text color */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 18px; /* Button font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s; /* Transition effect */
+            width: auto; /* Set width to auto for normal button size */
+            display: inline-block; /* Allow button to shrink to its content */
+        }
+
+        .get-started-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            position: absolute; /* Changed to absolute for overlay */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the container */
+            z-index: 3; /* Higher than video */
+            display: none; /* Initially hidden */
+            opacity: 0; /* Start with opacity 0 for animation */
+            transition: opacity 0.5s ease-in-out; /* Smooth transition */
+        }
+
+        .container.show {
+            display: block; /* Show the container */
+            opacity: 1; /* Fade in */
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f44336; /* Red background for close button */
+            border: none;
+            color: white; /* Text color */
+            width: 30px; /* Small width */
+            height: 30px; /* Small height */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Adjusted for smaller size */
+            cursor: pointer;
+            padding: 0; /* No padding */
+            margin: 0; /* No margin */
+            display: flex; /* Center the content */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+        }
+
+        .close-btn:hover {
+            background-color: #d32f2f; /* Darker red on hover */
+        }
+
+        h2 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #000;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .toggle-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #4CAF50;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .social-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-login p {
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .social-icons a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .social-icons img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .social-icons img:hover {
+            transform: scale(1.1);
+        }
+
+        .contact-us {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <video class="video-bg" autoplay loop muted>
+        <source src="Parcel_Pilot\assets\video\login signup bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="header">
+        <div class="logo-container">
+            <img src="Parcel_Pilot\assets\img\logo.png" alt="ParcelPilot Logo" class="logo">
+            <div class="website-name">ParcelPilot</div>
+        </div>
+        <div class="tagline">Seamlessly Connect, Effortlessly Fulfill</div>
+    </div>
+
+    <div class="description">
+        EcoGoods is an intuitive tool designed to help small businesses streamline their operations by integrating seamlessly with Amazon's Multi-Channel Fulfillment service. Our user-friendly platform simplifies inventory management, order fulfillment, and provides real-time insights, allowing you to focus on what you do best—growing your business.
+    </div>
+
+    <button class="get-started-button" onclick="toggleContainer()">Get Started</button>
+
+    <div class="container" id="form-container">
+        <button class="close-btn" onclick="toggleContainer()">✖</button>
+        <h2 id="form-title">Login</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+            <span class="toggle-link" onclick="toggleForm()">Don't have an account? Sign up</span>
+        </form>
+
+        <form id="signup-form" style="display: none;">
+            <div class="form-group">
+                <label for="signup-username">Username:</label>
+                <input type="text" id="signup-username" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-email">Email:</label>
+                <input type="email" id="signup-email" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+            <span class="toggle-link" onclick="toggleForm()">Already have an account? Login</span>
+        </form>
+
+        <div class="social-login">
+            <p>Or log in with:</p>
+            <div class="social-icons">
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google"></a>
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/X_icon.svg" alt="Twitter"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-us">Contact us: support@parcelpilot.com</div>
+
+    <script>
+        function toggleContainer() {
+            const container = document.getElementById('form-container');
+            container.classList.toggle('show');
+        }
+
+        function toggleForm() {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const formTitle = document.getElementById('form-title');
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                signupForm.style.display = "none";
+                formTitle.innerText = "Login";
+            } else {
+                loginForm.style.display = "none";
+                signupForm.style.display = "block";
+                formTitle.innerText = "Sign Up";
+            }
+        }
+    </script>
+</body>
+</html>
