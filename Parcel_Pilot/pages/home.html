@@ -21,16 +21,16 @@
         }
         /* Header styling for centered text */
         .header {
-            padding: 5px 0; /* Header padding */
+            padding: 5px 0;
             text-align: center;
             color: #333;
             position: relative;
-            z-index: 1; /* Ensure it appears above other content */
+            z-index: 1;
         }
         .website-name {
             font-family: "Playwrite GB S", cursive;
             font-size: 30px;
-            color: white; /* Change this if you want a different color */
+            color: white;
         }
         /* Navbar and content styling */
         #navBar {
@@ -59,27 +59,23 @@
             background-color: red;
             border-radius: 50%;
         }
+        /* Notification box styling with scroll */
         .notification-box {
             display: none;
             position: absolute;
             width: 300px;
+            max-height: 200px;
             background-color: #ffffff;
             border: 1px solid yellow;
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 2; /* Ensure it appears above other content */
+            overflow-y: auto; /* Enable vertical scrolling */
+            z-index: 1050; /* Ensures it stays above other content */
         }
-        .notification-box.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Iframe Container with Scroll */
         .iframe-container {
-            margin-top: 10px; /* Reduced gap */
+            margin-top: 10px;
             height: calc(100vh - 200px);
             border: 1px solid #dee2e6;
             border-radius: 8px;
@@ -90,6 +86,7 @@
             width: 100%;
             height: 100%;
             border: none;
+            overflow-y: auto; /* Enable vertical scrolling inside the iframe */
         }
         .video-bg {
             position: fixed;
@@ -118,7 +115,7 @@
     </div>
 
     <!-- Navbar and Content Container -->
-    <div class="container position-relative" style="margin-top: 10px;"> <!-- Reduced margin-top -->
+    <div class="container position-relative" style="margin-top: 10px;">
         <ul class="nav nav-pills justify-content-center" id="navBar">
             <li class="nav-item">
                 <a class="nav-link active" href="#" data-url="dashboard.html">Dashboard</a>
@@ -147,6 +144,10 @@
                 <li>Meeting at 3 PM</li>
                 <li>Update available</li>
                 <li>Backup completed</li>
+                <li>New message received</li>
+                <li>Meeting at 3 PM</li>
+                <li>Update available</li>
+                <li>Backup completed</li>
             </ul>
         </div>
     </div>
@@ -164,18 +165,18 @@
 
                     if (this === notificationTab) {
                         const rect = notificationTab.getBoundingClientRect();
-                        // Positioning the notification box directly below the notification tab with no gap
-                        notificationBox.style.top = `${rect.bottom + window.scrollY}px`; // Removed offset
+                        notificationBox.style.top = `${rect.bottom + window.scrollY}px`;
                         notificationBox.style.left = `${rect.left + window.scrollX}px`;
-
                         notificationBox.classList.toggle("show");
 
                         if (notificationBox.classList.contains("show")) {
-                            notificationTab.classList.remove("unread");
+                            notificationBox.style.display = "block"; // Show notification box
+                            notificationTab.classList.remove("unread"); // Remove unread dot
+                        } else {
+                            notificationBox.style.display = "none"; // Hide if clicked again
                         }
                     } else {
-                        notificationBox.classList.remove("show");
-
+                        notificationBox.style.display = "none"; // Hide notification box
                         navLinks.forEach(link => link.classList.remove("active"));
                         this.classList.add("active");
 
@@ -187,8 +188,10 @@
                 });
             });
 
+            // Hide the notification box if clicking outside
             document.addEventListener("click", function (event) {
                 if (!notificationBox.contains(event.target) && event.target !== notificationTab) {
+                    notificationBox.style.display = "none";
                     notificationBox.classList.remove("show");
                 }
             });
