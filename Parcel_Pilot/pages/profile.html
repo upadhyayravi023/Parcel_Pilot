@@ -4,9 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #BA68C8;
+        }
+        .profile-button {
+            background: rgb(99, 39, 120);
+            box-shadow: none;
+            border: none;
+        }
+        .profile-button:hover {
+            background: #682773;
+        }
+        .profile-button:focus {
+            background: #682773;
+            box-shadow: none;
+        }
+        .labels {
+            font-size: 11px;
+        }
+        .change-pic {
+            color: #007bff;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2>Profile</h2>
-    <p>Manage your profile settings and preferences here.</p>
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img id="profile-pic" class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    <a class="change-pic" onclick="changeProfilePicture()">Change Profile Picture</a> <!-- Change profile pic link -->
+                    <h5 id="display-full-name">Full Name</h5> <!-- Full name displayed here -->
+                    <span class="text-black-50" id="display-email">Email</span> <!-- Email displayed here -->
+                    <input type="file" id="upload-profile-pic" style="display: none;" accept="image/*" onchange="previewProfilePicture(event)">
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <!-- Profile Display Section -->
+                <div class="p-3 py-5" id="profile-display">
+                    <h4 class="text-right">Profile Details</h4>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Name:</label><p id="display-first-name">First Name</p></div>
+                        <div class="col-md-6"><label class="labels">Surname:</label><p id="display-surname">Surname</p></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Mobile Number:</label><p id="display-phone">123-456-7890</p></div>
+                        <div class="col-md-12"><label class="labels">Address Line 1:</label><p id="display-address1">Address Line 1</p></div>
+                        <div class="col-md-12"><label class="labels">Address Line 2:</label><p id="display-address2">Address Line 2</p></div>
+                        <div class="col-md-12"><label class="labels">Postcode:</label><p id="display-postcode">123456</p></div>
+                        <div class="col-md-12"><label class="labels">State:</label><p id="display-state">State</p></div>
+                        <div class="col-md-12"><label class="labels">Area:</label><p id="display-area">Area</p></div>
+                        <div class="col-md-12"><label class="labels">Email ID:</label><p id="display-email-id">email@example.com</p></div>
+                        <div class="col-md-12"><label class="labels">Education:</label><p id="display-education">Education Details</p></div>
+                    </div>
+                </div>
+                
+                <!-- Profile Edit Form Section (Initially Hidden) -->
+                <div class="p-3 py-5" id="profile-form" style="display: none;">
+                    <h4 class="text-right">Edit Profile</h4>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" id="edit-first-name" placeholder="first name" value=""></div>
+                        <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" id="edit-surname" placeholder="surname" value=""></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" id="edit-phone" placeholder="enter phone number" value=""></div>
+                        <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" id="edit-address1" placeholder="enter address line 1" value=""></div>
+                        <div class="col-md-12"><label class="labels">Address Line 2</label><input type="text" class="form-control" id="edit-address2" placeholder="enter address line 2" value=""></div>
+                        <div class="col-md-12"><label class="labels">Postcode</label><input type="text" class="form-control" id="edit-postcode" placeholder="postcode" value=""></div>
+                        <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" id="edit-state" placeholder="state" value=""></div>
+                        <div class="col-md-12"><label class="labels">Area</label><input type="text" class="form-control" id="edit-area" placeholder="area" value=""></div>
+                        <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" id="edit-email-id" placeholder="email id" value=""></div>
+                        <div class="col-md-12"><label class="labels">Education</label><input type="text" class="form-control" id="edit-education" placeholder="education" value=""></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button class="btn btn-primary profile-button" id="edit-profile-btn">Edit Profile</button>
+        </div>
+    </div>
+
+    <script>
+        // Initial data for profile display
+        const profileData = {
+            firstName: "Badass",
+            surname: "Ravikumar",
+            phone: "123-456-7890",
+            address1: "Bada Makaan",
+            address2: "Gali no 411",
+            postcode: "123456",
+            state: "Mirzapur",
+            area: "Gunda Nagar",
+            emailId: "badassravikumarr.ug23.cs@nitp.ac.in",
+            education: "NITP Civil"
+        };
+
+        // Populate display with initial data
+        document.getElementById("display-full-name").textContent = `${profileData.firstName} ${profileData.surname}`;
+        document.getElementById("display-email").textContent = profileData.emailId;
+        document.getElementById("display-first-name").textContent = profileData.firstName;
+        document.getElementById("display-surname").textContent = profileData.surname;
+        document.getElementById("display-phone").textContent = profileData.phone;
+        document.getElementById("display-address1").textContent = profileData.address1;
+        document.getElementById("display-address2").textContent = profileData.address2;
+        document.getElementById("display-postcode").textContent = profileData.postcode;
+        document.getElementById("display-state").textContent = profileData.state;
+        document.getElementById("display-area").textContent = profileData.area;
+        document.getElementById("display-email-id").textContent = profileData.emailId;
+        document.getElementById("display-education").textContent = profileData.education;
+
+        document.getElementById("edit-profile-btn").addEventListener("click", function() {
+            var displaySection = document.getElementById("profile-display");
+            var formSection = document.getElementById("profile-form");
+            var button = document.getElementById("edit-profile-btn");
+
+            if (formSection.style.display === "none") {
+                displaySection.style.display = "none";
+                formSection.style.display = "block";
+                button.textContent = "Save Profile";
+            } else {
+                displaySection.style.display = "block";
+                formSection.style.display = "none";
+                button.textContent = "Edit Profile";
+            }
+        });
+
+        function changeProfilePicture() {
+            document.getElementById("upload-profile-pic").click();
+        }
+
+        function previewProfilePicture(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById("profile-pic");
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </body>
 </html>
